@@ -36,10 +36,17 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView(view)
+        initViewModel()
     }
 
+    private fun initViewModel() {
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.galleryInfoLiveData.observe(viewLifecycleOwner) { list ->
+            Log.d(TAG, list.size.toString())
+            setAdapter(list)
+        }
+        viewModel.getGalleryInfo(context)
     }
 
     private fun setAdapter(dataSetGalleryInfo: List<GalleryInfo>) {
