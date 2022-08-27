@@ -85,7 +85,9 @@ class DetailedFragment : Fragment() {
 
         // display copyright
         if(!galleryInfo.copyright.isNullOrEmpty()) {
-            val copyright = resources.getString(R.string.copyright) + galleryInfo.copyright
+
+            val copyright = resources.getString(R.string.copyright) + galleryInfo.copyright.replace("\n", "")
+
             tvCopyright.text = copyright
         }
 
