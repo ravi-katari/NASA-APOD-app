@@ -76,12 +76,18 @@ class DetailedFragment : Fragment() {
         }
 
         // display title
-        val title = galleryInfo.title + "(" + galleryInfo.service_version + ")"
-        tvTitle.text = title
+        if(!galleryInfo.title.isNullOrEmpty()) {
+            val title = galleryInfo.title + "(" + galleryInfo.service_version + ")"
+            tvTitle.text = title
+        } else {
+            tvTitle.text = "NA"
+        }
 
         // display copyright
-        val copyright = resources.getString(R.string.copyright) + galleryInfo.copyright
-        tvCopyright.text = copyright
+        if(!galleryInfo.copyright.isNullOrEmpty()) {
+            val copyright = resources.getString(R.string.copyright) + galleryInfo.copyright
+            tvCopyright.text = copyright
+        }
 
         tvDescr.text = galleryInfo.explanation
     }
