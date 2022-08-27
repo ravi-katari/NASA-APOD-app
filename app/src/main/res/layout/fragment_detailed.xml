@@ -29,7 +29,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="@dimen/lm_10dp"
-                android:text="copyright"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textColor="@color/white"
                 android:textSize="@dimen/ts_12sp" />
