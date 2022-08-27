@@ -93,7 +93,7 @@ class ImageFullscreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val snackbar = Snackbar
-            .make(view, "Pinch In / Pinch Out through Fingers", Snackbar.LENGTH_LONG)
+            .make(view, "Use Fingers to ZoomIn / ZoomOut", Snackbar.LENGTH_SHORT)
         snackbar.show()
 
         visible = true
