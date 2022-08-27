@@ -55,6 +55,6 @@ class MainViewModel : ViewModel() {
             .beginTransaction()
             .replace(R.id.container, fragment)
             .addToBackStack(null)
-            .commit()
+            .commitAllowingStateLoss()
     }
 }
