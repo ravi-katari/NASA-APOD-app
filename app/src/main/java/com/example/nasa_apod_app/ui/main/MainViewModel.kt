@@ -1,8 +1,6 @@
 package com.example.nasa_apod_app.ui.main
 
-import android.app.Activity
 import android.content.Context
-import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,8 +23,22 @@ class MainViewModel : ViewModel() {
      * Reading json data from assets(data.json)
      * */
     fun getGalleryInfo(context: Context?) {
+
         context?.let {
-            galleryInfoLiveData.postValue(Datasource().loadGalleryData(it, "data.json"))
+
+            /**
+             * Sort by Date Descending(To show latest First)
+             * And
+             * Filter for [media_type] is [image] only
+             * */
+            var listGalleryInfo: List<GalleryInfo> = Datasource().loadGalleryData(it, "data.json")
+
+            // Sorting
+            listGalleryInfo.sortedByDescending { it.date }
+            // Filtering
+            listGalleryInfo = listGalleryInfo.filter { it.media_type == "image" }
+
+            galleryInfoLiveData.postValue(listGalleryInfo)
         }
     };
 
