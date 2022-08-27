@@ -54,10 +54,33 @@ class ViewPagerFragment : Fragment() {
         viewPager = view.findViewById(R.id.viewpager)
     }
 
-    private fun setAdapterForViewPager(selectedIndex: Int) {
+    private fun setAdapterForViewPager() {
+
         context?.let {
+
             viewPager.adapter = ViewPagerAdapter(it, dataSetGalleryInfo)
-            viewPager.setCurrentItem(selectedIndex, false)
+
+            // To jump to exact one selected in Previous screen
+            viewModel.currentPositionLiveData.value?.let { it1 ->
+                viewPager.setCurrentItem(
+                    it1,
+                    false
+                )
+            }
+
+            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    /**
+                     * To show exact Item during backpress
+                     * from next screen(i.e, FullscreenFragment)
+                     * Also
+                     * To scroll item to relevant one in Home Screen(MainFragment)
+                     */
+                    viewModel.currentPositionLiveData.setValue(position)
+                }
+            })
         }
     }
 
@@ -67,11 +90,9 @@ class ViewPagerFragment : Fragment() {
 
             viewModel.galleryInfoLiveData.observe(viewLifecycleOwner) { list ->
                 dataSetGalleryInfo = list
+                setAdapterForViewPager()
             };
 
-            viewModel.currentPositionLiveData.observe(viewLifecycleOwner) {
-                setAdapterForViewPager(it)
-            }
         }
     }
 }
