@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NASA-APOD-app</string>
+    <string name="copyright">©</string>
+    <string name="exit_fullscreen">EXIT FULL SCREEN</string>
 </resources>
