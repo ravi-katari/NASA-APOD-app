@@ -46,7 +46,7 @@ class MainFragment : Fragment() {
     }
 
     private fun setPageTitle() {
-        (context as MainActivity).setTitle("Gallery")
+        viewModel.setScreenTitle(context, "Gallery")
     }
 
     private fun initViewModel() {
@@ -55,6 +55,11 @@ class MainFragment : Fragment() {
             Log.d(TAG, list.size.toString())
             setAdapter(list)
         }
+
+        // During coming back from Detailed Info Screen should disable it
+        viewModel.showOrHideBackButton(context, false)
+
+        // Loading info from Assets here
         viewModel.getGalleryInfo(context)
     }
 
@@ -62,7 +67,8 @@ class MainFragment : Fragment() {
 
         recyclerView.adapter = context?.let {
             ItemAdapter(it, dataSetGalleryInfo) { position ->
-                viewModel.navigateToDetailedFragment(context, position)
+                viewModel.currentPositionLiveData.setValue(position)
+                viewModel.navigateToViewPagerFragment(context)
             }
         }
 

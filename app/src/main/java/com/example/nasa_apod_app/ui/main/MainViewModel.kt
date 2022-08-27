@@ -2,6 +2,7 @@ package com.example.nasa_apod_app.ui.main
 
 import android.app.Activity
 import android.content.Context
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,10 @@ class MainViewModel : ViewModel() {
         MutableLiveData<List<GalleryInfo>>()
     }
 
+    val currentPositionLiveData: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
     /**
      * Reading json data from assets(data.json)
      * */
@@ -25,8 +30,20 @@ class MainViewModel : ViewModel() {
         }
     };
 
-    fun navigateToDetailedFragment(context: Context?, selectedItemIndex: Int) {
-        loadFragment(context, DetailedFragment.newInstance(selectedItemIndex))
+    /**
+     * Below function has been used to Show/Hide
+     * HomeUp Button(Back button) in ActionBar
+     * */
+    fun showOrHideBackButton(context: Context?, shouldEnable: Boolean) {
+        (context as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(shouldEnable)
+    }
+
+    fun setScreenTitle(context: Context?, title: String) {
+        (context as MainActivity).setTitle(title)
+    }
+
+    fun navigateToViewPagerFragment(context: Context?) {
+        loadFragment(context, ViewPagerFragment())
     }
 
     fun navigateToFullScreenFragment(context: Context?, imageUrl: String) {

@@ -1,8 +1,6 @@
 package com.example.nasa_apod_app.ui.main
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +9,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.BaseRequestOptions
 import com.example.nasa_apod_app.MainActivity
 import com.example.nasa_apod_app.R
 import com.example.nasa_apod_app.model.GalleryInfo
@@ -22,11 +19,8 @@ class DetailedFragment : Fragment() {
 
     private val TAG: String = DetailedFragment::class.java.toString()
 
-    private var SELECTED_INDEX: Int? = 0
-
     private val viewModel: MainViewModel by activityViewModels()
 
-    private lateinit var dataSetGalleryInfo: List<GalleryInfo>
     private lateinit var galleryInfo: GalleryInfo
 
     private lateinit var ivGalleryPic: ImageView
@@ -39,7 +33,7 @@ class DetailedFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            SELECTED_INDEX = it.getInt(ARG_PARAM1)
+            galleryInfo = it.getSerializable(ARG_PARAM1) as GalleryInfo
         }
     }
 
@@ -53,10 +47,10 @@ class DetailedFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: Int) =
+        fun newInstance(info: GalleryInfo) =
             DetailedFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_PARAM1, param1)
+                    putSerializable(ARG_PARAM1, info)
                 }
             }
     }
@@ -65,56 +59,22 @@ class DetailedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initWidgets(view)
-        initViewModel()
         setupBackButton()
         initListeners()
+        initCurrentData()
     }
 
-    private fun setPageTitle() {
-        (context as MainActivity).setTitle(galleryInfo.title)
-    }
-
-    private fun initWidgets(view: View) {
-        ivGalleryPic = view.findViewById(R.id.iv_gal)
-        ivFull = view.findViewById(R.id.iv_fullscr)
-        tvTitle = view.findViewById(R.id.tv_title)
-        tvCopyright = view.findViewById(R.id.tv_copyright)
-        tvDescr = view.findViewById(R.id.tv_descr)
-    }
-
-    private fun initViewModel() {
+    private fun initCurrentData() {
 
         context?.let {
-
-            viewModel.galleryInfoLiveData.observe(viewLifecycleOwner) { list ->
-
-                Log.i(TAG, list.size.toString())
-
-                dataSetGalleryInfo = list
-
-                SELECTED_INDEX?.let { it1 ->
-
-                    galleryInfo = list[it1]
-
-                    displayHdImage(it)
-                    displayInfo()
-                    setPageTitle()
-                }
-            };
+            Glide
+                .with(it)
+                .load(galleryInfo.hdurl)
+                .centerCrop()
+                .thumbnail(Glide.with(it).load(R.drawable.loading_spinner))
+                .into(ivGalleryPic)
         }
-    }
 
-    private fun displayHdImage(context: Context) {
-
-        Glide
-            .with(context)
-            .load(galleryInfo.hdurl)
-            .centerCrop()
-            .thumbnail(Glide.with(context).load(R.drawable.loading_spinner))
-            .into(ivGalleryPic)
-    }
-
-    private fun displayInfo() {
         // display title
         val title = galleryInfo.title + "(" + galleryInfo.service_version + ")"
         tvTitle.text = title
@@ -124,6 +84,14 @@ class DetailedFragment : Fragment() {
         tvCopyright.text = copyright
 
         tvDescr.text = galleryInfo.explanation
+    }
+
+    private fun initWidgets(view: View) {
+        ivGalleryPic = view.findViewById(R.id.iv_gal)
+        ivFull = view.findViewById(R.id.iv_fullscr)
+        tvTitle = view.findViewById(R.id.tv_title)
+        tvCopyright = view.findViewById(R.id.tv_copyright)
+        tvDescr = view.findViewById(R.id.tv_descr)
     }
 
     private fun setupBackButton() {
