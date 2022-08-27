@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.data.Datasource
+import com.example.nasa_apod_app.MainActivity
 import com.example.nasa_apod_app.R
 import com.example.nasa_apod_app.adapter.ItemAdapter
 import com.example.nasa_apod_app.model.GalleryInfo
@@ -19,10 +21,13 @@ class MainFragment : Fragment() {
     private val TAG: String = MainFragment::class.java.toString()
 
     companion object {
+        @JvmStatic
+        var TITLE: String = "Gallery"
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by activityViewModels()
+
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
@@ -37,11 +42,15 @@ class MainFragment : Fragment() {
 
         initRecyclerView(view)
         initViewModel()
+        setPageTitle()
+    }
+
+    private fun setPageTitle() {
+        (context as MainActivity).setTitle("Gallery")
     }
 
     private fun initViewModel() {
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.galleryInfoLiveData.observe(viewLifecycleOwner) { list ->
             Log.d(TAG, list.size.toString())
             setAdapter(list)
@@ -51,9 +60,11 @@ class MainFragment : Fragment() {
 
     private fun setAdapter(dataSetGalleryInfo: List<GalleryInfo>) {
 
-        recyclerView.adapter = context?.let { ItemAdapter(it, dataSetGalleryInfo) {
-            position ->  viewModel.navigateToDetailedFragment(context, position)
-        }}
+        recyclerView.adapter = context?.let {
+            ItemAdapter(it, dataSetGalleryInfo) { position ->
+                viewModel.navigateToDetailedFragment(context, position)
+            }
+        }
 
         /**
          * Using below to improve performance
@@ -64,6 +75,6 @@ class MainFragment : Fragment() {
     }
 
     private fun initRecyclerView(view: View) {
-         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
     }
 }

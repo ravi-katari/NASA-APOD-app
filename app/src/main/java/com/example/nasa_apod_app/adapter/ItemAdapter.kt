@@ -17,21 +17,22 @@ import com.example.nasa_apod_app.model.GalleryInfo
 class ItemAdapter(
     private val context: Context,
     private val dataset: List<GalleryInfo>,
-    private var onItemClicked: ((position: Int) -> Unit)):
+    private var onItemClicked: ((position: Int) -> Unit)
+) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
-    class ItemViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val tvTitle: TextView = view.findViewById(R.id.item_title)
         val imageView: ImageView = view.findViewById(R.id.item_image)
     }
 
     /**
-    * Create new views (invoked by the layout manager)
-    */
+     * Create new views (invoked by the layout manager)
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
 
         val adapterLayout = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item, parent, false)
+            .inflate(R.layout.list_item, parent, false)
 
         return ItemViewHolder(adapterLayout)
     }
@@ -51,7 +52,7 @@ class ItemAdapter(
             .thumbnail(Glide.with(context).load(R.drawable.loading_spinner))
             .into(holder.imageView);
 
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             onItemClicked(position)
         }
     }
