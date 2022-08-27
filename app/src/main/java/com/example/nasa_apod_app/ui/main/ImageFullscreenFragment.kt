@@ -3,7 +3,6 @@ package com.example.nasa_apod_app.ui.main
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +16,7 @@ import com.example.nasa_apod_app.MainActivity
 import com.example.nasa_apod_app.R
 import com.example.nasa_apod_app.ZoomClass
 import com.example.nasa_apod_app.databinding.FragmentImageFullscreenBinding
-
-/**
- * An example full-screen fragment that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
+import com.google.android.material.snackbar.Snackbar
 
 private const val ARG_PARAM1 = "param1"
 
@@ -61,7 +56,6 @@ class ImageFullscreenFragment : Fragment() {
         if (AUTO_HIDE) {
             delayedHide(AUTO_HIDE_DELAY_MILLIS)
         }
-        Log.i("AAA", "BBBB")
         (activity as MainActivity).onBackPressed()
         false
     }
@@ -98,6 +92,10 @@ class ImageFullscreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val snackbar = Snackbar
+            .make(view, "Pinch In / Pinch Out through Fingers", Snackbar.LENGTH_LONG)
+        snackbar.show()
+
         visible = true
 
         btnExit = binding.btnExit
@@ -105,21 +103,13 @@ class ImageFullscreenFragment : Fragment() {
         fullscreenContentControls = binding.fullscreenContentControls
         // Set up the user interaction to manually show or hide the system UI.
         fullscreenContent?.setOnClickListener {
-            Log.i("AAA", "AAA")
             toggle()
         }
 
-
-
         displayImage()
 
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-//        btnExit?.setOnTouchListener(delayHideTouchListener)
-        (btnExit as Button).setOnClickListener{
+        (btnExit as Button).setOnClickListener {
             (activity as MainActivity).onBackPressed()
-            Log.i("Aaa", "BBbbbbbbbb")
         }
     }
 
