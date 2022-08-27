@@ -63,6 +63,21 @@ class MainFragment : Fragment() {
         viewModel.getGalleryInfo(context)
     }
 
+    override fun onResume() {
+        super.onResume()
+        /**
+         * To scroll recyclerview to current position that
+         * user stayed with ViewPager(i.e, Next screen)
+         * So with whatever details that user saw in next
+         * screen from that position only user can start scrolling
+         * */
+        viewModel.currentPositionLiveData.value?.let {
+            Log.i(TAG, "Scrolling To Position: $it")
+            recyclerView.scrollToPosition(it);
+            recyclerView.adapter?.notifyDataSetChanged()
+        }
+    }
+
     private fun setAdapter(dataSetGalleryInfo: List<GalleryInfo>) {
 
         recyclerView.adapter = context?.let {
