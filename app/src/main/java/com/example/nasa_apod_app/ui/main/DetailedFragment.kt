@@ -1,0 +1,128 @@
+package com.example.nasa_apod_app.ui.main
+
+import android.content.Context
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
+import com.example.nasa_apod_app.MainActivity
+import com.example.nasa_apod_app.R
+import com.example.nasa_apod_app.model.GalleryInfo
+
+private const val ARG_PARAM1 = "param1"
+
+class DetailedFragment : Fragment() {
+
+    private val TAG: String = DetailedFragment::class.java.toString()
+
+    private var SELECTED_INDEX: Int? = 0
+
+    private val viewModel: MainViewModel by activityViewModels()
+
+    private lateinit var dataSetGalleryInfo: List<GalleryInfo>
+    private lateinit var galleryInfo: GalleryInfo
+
+    private lateinit var ivGalleryPic: ImageView
+    private lateinit var tvTitle: TextView
+    private lateinit var tvCopyright: TextView
+    private lateinit var tvDescr: TextView
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            SELECTED_INDEX = it.getInt(ARG_PARAM1)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_detailed, container, false)
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(param1: Int) =
+            DetailedFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_PARAM1, param1)
+                }
+            }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initWidgets(view)
+        initViewModel()
+        setupBackButton()
+    }
+
+    private fun setPageTitle() {
+        (context as MainActivity).setTitle(galleryInfo.title)
+    }
+
+    private fun initWidgets(view: View) {
+        ivGalleryPic = view.findViewById(R.id.iv_gal)
+        tvTitle = view.findViewById(R.id.tv_title)
+        tvCopyright = view.findViewById(R.id.tv_copyright)
+        tvDescr = view.findViewById(R.id.tv_descr)
+    }
+
+    private fun initViewModel() {
+
+        context?.let {
+
+            viewModel.galleryInfoLiveData.observe(viewLifecycleOwner) { list ->
+
+                Log.i(TAG, list.size.toString())
+
+                dataSetGalleryInfo = list
+
+                SELECTED_INDEX?.let { it1 ->
+
+                    galleryInfo = list[it1]
+
+                    displayHdImage(it)
+                    displayInfo()
+                    setPageTitle()
+                }
+            };
+        }
+    }
+
+    private fun displayHdImage(context: Context) {
+        Glide
+            .with(context)
+            .load(galleryInfo.hdurl)
+            .centerCrop()
+            .thumbnail(Glide.with(context).load(R.drawable.loading_spinner))
+            .into(ivGalleryPic)
+    }
+
+    private fun displayInfo() {
+
+        // display title
+        val title = galleryInfo.title + "(" + galleryInfo.service_version + ")"
+        tvTitle.text = title
+
+        // display copyright
+        val copyright = resources.getString(R.string.copyright) + galleryInfo.copyright
+        tvCopyright.text = copyright
+
+        tvDescr.text = galleryInfo.explanation
+    }
+
+    private fun setupBackButton() {
+        (context as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+}
