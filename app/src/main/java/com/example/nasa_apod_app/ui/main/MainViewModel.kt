@@ -28,6 +28,11 @@ class MainViewModel : ViewModel() {
     fun navigateToDetailedFragment(context: Context?, selectedItemIndex: Int) {
         loadFragment(context, DetailedFragment.newInstance(selectedItemIndex))
     }
+
+    fun navigateToFullScreenFragment(context: Context?, imageUrl: String) {
+        loadFragment(context, ImageFullscreenFragment.newInstance(imageUrl))
+    }
+
     fun loadFragment(context: Context?, fragment: Fragment) {
         (context as MainActivity).supportFragmentManager
             .beginTransaction()
