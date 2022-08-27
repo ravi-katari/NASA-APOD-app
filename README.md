@@ -1,17 +1,11 @@
-# NASA-APOD-app
-Obvious Task:
+## Obvious Task:
+### NASA APOD app
 
-1. Home Screen
-![](screenshots/HomeScreen.png)
-
-2. Second Screen(Detailed Information Screen)
-![](screenshots/SecondScreenForInfo.png)
-
-3. ImageZoomInZoomOutScreen
-![](screenshots/ZoomInScreen.png)
-
-![](screenshots/ZoomInScreenWithExitButton.png)
+<img width="250" alt="HomeScreen" src="screenshots/HomeScreen.png">.  <img width="250" alt="HomeScreen" src="screenshots/SecondScreenForInfo.png">.  <img width="250" alt="HomeScreen" src="screenshots/SwipeLeftOrRight.jpeg"> <img width="250" alt="HomeScreen" src="screenshots/ZoomInScreen.png"> <img width="250" alt="HomeScreen" src="screenshots/ZoomInScreenWithExitButton.png">
 
 
-Output
-![](screenshots/TaskRecording.gif)
+
+([Click here to see Gif](https://drive.google.com/file/d/1erxOY04s9-PfZcrTDo2C5mL_Ohtaj2y7/view?usp=sharing))
+
+
+
