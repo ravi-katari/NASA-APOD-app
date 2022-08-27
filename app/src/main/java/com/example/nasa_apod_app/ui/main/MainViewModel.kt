@@ -2,6 +2,7 @@ package com.example.nasa_apod_app.ui.main
 
 import android.app.Activity
 import android.content.Context
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.affirmations.data.Datasource
@@ -25,6 +26,13 @@ class MainViewModel : ViewModel() {
     };
 
     fun navigateToDetailedFragment(context: Context?, selectedItemIndex: Int) {
-        (context as MainActivity).loadFragment(DetailedFragment.newInstance(selectedItemIndex))
+        loadFragment(context, DetailedFragment.newInstance(selectedItemIndex))
+    }
+    fun loadFragment(context: Context?, fragment: Fragment) {
+        (context as MainActivity).supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
