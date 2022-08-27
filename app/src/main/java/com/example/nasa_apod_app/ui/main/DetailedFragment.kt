@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.BaseRequestOptions
 import com.example.nasa_apod_app.MainActivity
 import com.example.nasa_apod_app.R
 import com.example.nasa_apod_app.model.GalleryInfo
@@ -32,6 +33,7 @@ class DetailedFragment : Fragment() {
     private lateinit var tvTitle: TextView
     private lateinit var tvCopyright: TextView
     private lateinit var tvDescr: TextView
+    private lateinit var ivFull: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +67,7 @@ class DetailedFragment : Fragment() {
         initWidgets(view)
         initViewModel()
         setupBackButton()
+        initListeners()
     }
 
     private fun setPageTitle() {
@@ -73,6 +76,7 @@ class DetailedFragment : Fragment() {
 
     private fun initWidgets(view: View) {
         ivGalleryPic = view.findViewById(R.id.iv_gal)
+        ivFull = view.findViewById(R.id.iv_fullscr)
         tvTitle = view.findViewById(R.id.tv_title)
         tvCopyright = view.findViewById(R.id.tv_copyright)
         tvDescr = view.findViewById(R.id.tv_descr)
@@ -101,6 +105,7 @@ class DetailedFragment : Fragment() {
     }
 
     private fun displayHdImage(context: Context) {
+
         Glide
             .with(context)
             .load(galleryInfo.hdurl)
@@ -110,7 +115,6 @@ class DetailedFragment : Fragment() {
     }
 
     private fun displayInfo() {
-
         // display title
         val title = galleryInfo.title + "(" + galleryInfo.service_version + ")"
         tvTitle.text = title
@@ -124,5 +128,11 @@ class DetailedFragment : Fragment() {
 
     private fun setupBackButton() {
         (context as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun initListeners() {
+        ivFull.setOnClickListener {
+            viewModel.navigateToFullScreenFragment(context, galleryInfo.hdurl)
+        }
     }
 }
