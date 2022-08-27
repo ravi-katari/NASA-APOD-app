@@ -8,6 +8,7 @@ import com.example.affirmations.data.Datasource
 import com.example.nasa_apod_app.MainActivity
 import com.example.nasa_apod_app.R
 import com.example.nasa_apod_app.model.GalleryInfo
+import com.google.android.material.snackbar.Snackbar
 
 class MainViewModel : ViewModel() {
 
@@ -56,6 +57,11 @@ class MainViewModel : ViewModel() {
 
     fun navigateToViewPagerFragment(context: Context?) {
         loadFragment(context, ViewPagerFragment())
+        Snackbar.make(
+            (context as MainActivity).findViewById(R.id.container),
+            "Swipe Left/Right to see Prev/Next Item",
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     fun navigateToFullScreenFragment(context: Context?, imageUrl: String) {
